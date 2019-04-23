@@ -1,0 +1,165 @@
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:semantic="sap.m.semantic" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:smartfield="sap.ui.comp.smartfield" xmlns:smartform="sap.ui.comp.smartform" xmlns:l="sap.ui.layout" xmlns:smart="sap.ui.comp.smartfield" controllerName="KLADemo.controller.MainView" displayBlock="true">
+  <App id="app">
+    <pages>
+      <sap.m.semantic:FullscreenPage xmlns:sap.m.semantic="sap.m.semantic" title="KLA Demo" id="page">
+        <sap.m.semantic:content>
+          <Panel id="panelMenu" expandable="true" expanded="true">
+            <content>
+              <VBox width="100%" direction="Column" id="vboxSF">
+                <items>
+                  <sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" editable="true" layout="ResponsiveGridLayout" id="formSF">
+                    <sap.ui.layout.form:content>
+                      <sap.ui.core:Title text="Menu" id="titleMenu"/>
+                      <Label text="Device Status" id="labelDeviceStatus"/>
+                      <Input width="50%" id="statusID" editable="false"/>
+                      <Label text="Status" id="labelStatus"/>
+                      <Input width="50%" id="statusID2" editable="false"/>
+                    </sap.ui.layout.form:content>
+                  </sap.ui.layout.form:SimpleForm>
+                  <HBox width="100%" id="hbox1">
+                    <items>
+                      <Button xmlns="sap.m" text="Unregister" id="unregister" press="btnPress_unRegister"/>
+                      <Button xmlns="sap.m" text="Clear Log" id="clearLog" press="btnPress_clearLog"/>
+                      <Button xmlns="sap.m" text="View Log" id="viewLog" press="btnPress_viewLog"/>
+                    </items>
+                  </HBox>
+                  <HBox width="100%" id="hbox2">
+                    <items>
+                      <Button xmlns="sap.m" text="Open Offline Store" id="openStore" press="btnPress_openStore"/>
+                      <Button xmlns="sap.m" text="Close Offline Store" id="closeStore" press="btnPress_closeStore"/>
+                      <Button xmlns="sap.m" text="Clear Offline Store" id="clearStore" press="btnPress_clearStore"/>
+                    </items>
+                  </HBox>
+                  <HBox width="100%" id="hbox3">
+                    <items>
+                      <Button xmlns="sap.m" text="Read Local" id="readlocal" press="btnPress_readlocal"/>
+                      <Button xmlns="sap.m" text="Filter on Errors" id="readErrorEntries" press="btnPress_readErrorEntries"/>
+                      <Button xmlns="sap.m" text="Flush and Refresh" id="sync" press="btnPress_flushStore"/>
+                      <Button xmlns="sap.m" text="Error Archive" id="showErrors" press="btnPress_showErrors"/>
+                      <Button xmlns="sap.m" text="Request Queue" id="requestQueue" press="btnPress_checkRequestQueue"/>
+                    </items>
+                  </HBox>
+                </items>
+              </VBox>
+            </content>
+          </Panel>
+          <Panel id="panelBusinessPartner" expandable="true" expanded="true">
+            <content>
+              <VBox width="100%" direction="Column" id="vboxBusinessPartners">
+                <!--<Table id="tableSuppliers" width="auto" class="sapUiResponsiveMargin" items="{ path: 'HISTORY_OPTOGRAMS', sorter: { path: 'TEST', group : true } }" -->
+                <!-- working <Table id="SupplierTable" width="auto" items="{ path: '/Suppliers', sorter: { path: 'Name', descending: false } }" -->
+                <!--<Table id="SuppliersTable" width="auto" -->
+                <Table id="SuppliersTable" width="auto" items="{ path: 'SuppliersModel>/results' }" noDataText="{worklistView>/tableNoDataText}" growing="true" growingScrollToLoad="true" updateFinished=".onUpdateFinished">
+                  <headerToolbar>
+                    <Toolbar>
+                      <Title id="tableHeader" text="{worklistView>/worklistTableTitle}"/>
+                      <ToolbarSpacer/>
+                      <SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search="onSearch" width="auto"/>
+                      <content>
+                        <Button xmlns="sap.m" text="Read Business Partners" id="read" press="btnPress_readBusinessPartners"/>
+                      </content>
+                    </Toolbar>
+                  </headerToolbar>
+                  <columns>
+                    <Column id="BusinessPartnerID_Column">
+                      <Text text="BusinessPartnerID" id="BusinessPartnerID"/>
+                    </Column>
+                    <Column id="CompanyName_Column" hAlign="End">
+                      <Text text="CompanyName" id="CompanyName"/>
+                    </Column>
+                    <Column id="WebAddress_Column" hAlign="End">
+                      <Text text="WebAddress" id="WebAddress"/>
+                    </Column>
+                    <Column id="EmailAddress_Column" hAlign="End">
+                      <Text text="EmailAddress" id="EmailAddress"/>
+                    </Column>
+                    <Column id="City_Column" hAlign="End">
+                      <Text text="City" id="City"/>
+                    </Column>
+                    <Column id="Country_Column" hAlign="End">
+                      <Text text="Country" id="Country"/>
+                    </Column>
+                  </columns>
+                  <items>
+                    <ColumnListItem type="Navigation" press="onPress">
+                      <cells>
+                        <ObjectIdentifier title="{SuppliersModel>BusinessPartnerID}"/>
+                        <Text text="{SuppliersModel>CompanyName}"/>
+                        <Text text="{SuppliersModel>WebAddress}"/>
+                        <Text text="{SuppliersModel>EmailAddress}"/>
+                        <Text text="{SuppliersModel>Address/City}"/>
+                        <Text text="{SuppliersModel>Address/Country}"/>
+                      </cells>
+                    </ColumnListItem>
+                  </items>
+                </Table>
+              </VBox>
+            </content>
+          </Panel>
+          <Panel id="panelCreateBusinessPartner" expandable="true" expanded="true">
+            <content>
+              <VBox width="100%" direction="Column" id="vboxCreateBusinessPartner">
+                <f:SimpleForm class="editableForm" columnsL="1" columnsM="1" editable="true" emptySpanL="4" emptySpanM="4" id="SupplierForm" labelSpanL="3" labelSpanM="3" layout="ResponsiveGridLayout" maxContainerCols="2" minWidth="1024" title="{= ${viewModel>/mode} === 'edit'? 'Edit GWSAMPLE_BASIC.BusinessPartner': 'New GWSAMPLE_BASIC.BusinessPartner'}">
+                  <f:content>
+                    <Label text="Business Partner ID" required="true"/>
+                    <Input name="BusinessPartnerID" id="Form_BusinessPartnerID" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="{= ${viewModel>/mode} === 'edit'? false: true}" visible="true" value="{BusinessPartnerID}"/>
+                    <Label text="Company" required="true"/>
+                    <Input name="CompanyName" id="Form_CompanyName" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{CompanyName}"/>
+                    <Label text="City" required="true"/>
+                    <Input name="Address/City" id="Address_City" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{ path: 'Address/City', type: 'sap.ui.model.odata.type.String' , constraints:{ maxLength:40, nullable:false } }"/>
+                    <Label text="Postal Code" required="true"/>
+                    <Input name="Address/PostalCode" id="Address_PostalCode" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{ path: 'Address/PostalCode', type: 'sap.ui.model.odata.type.String' , constraints:{ maxLength:10, nullable:false } }"/>
+                    <Label text="Street" required="true"/>
+                    <Input name="Address/Street" id="Address_Street" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{ path: 'Address/Street', type: 'sap.ui.model.odata.type.String' , constraints:{ maxLength:60, nullable:false } }"/>
+                    <Label text="Building" required="true"/>
+                    <Input name="Address/Building" id="Address_Building" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{ path: 'Address/Building', type: 'sap.ui.model.odata.type.String' , constraints:{ maxLength:10, nullable:false } }"/>
+                    <Label text="Country" required="true"/>
+                    <Input name="Address/Country" id="Address_Country" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{ path: 'Address/Country', type: 'sap.ui.model.odata.type.String' , constraints:{ maxLength:3, nullable:false } }"/>
+                    <Label text="Address Type" required="true"/>
+                    <Input name="Address/AddressType" id="Address_AddressType" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{ path: 'Address/AddressType', type: 'sap.ui.model.odata.type.String' , constraints:{ maxLength:2, nullable:false } }"/>
+                    <Label text="Web Address" required="false"/>
+                    <Input name="WebAddress" id="Form_WebAddress" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{ path: 'WebAddress', type: 'sap.ui.model.odata.type.String' }"/>
+                    <Label text="E-Mail" required="true"/>
+                    <Input name="EmailAddress" id="Form_EmailAddress" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{ path: 'EmailAddress', type: 'sap.ui.model.odata.type.String' , constraints:{ maxLength:255, nullable:false } }"/>
+                    <Label text="Phone No." required="false"/>
+                    <Input name="PhoneNumber" id="Form_PhoneNumber" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{ path: 'PhoneNumber', type: 'sap.ui.model.odata.type.String' , constraints:{ maxLength:30 } }"/>
+                    <Label text="Fax Number" required="false"/>
+                    <Input name="FaxNumber" id="Form_FaxNumber" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{ path: 'FaxNumber', type: 'sap.ui.model.odata.type.String' , constraints:{ maxLength:30 } }"/>
+                    <Label text="Legal Form" required="false"/>
+                    <Input name="LegalForm" id="Form_LegalForm" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{ path: 'LegalForm', type: 'sap.ui.model.odata.type.String' , constraints:{ maxLength:10 } }"/>
+                    <Label text="Currency Code" required="true"/>
+                    <Input name="CurrencyCode" id="Form_CurrencyCode" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{ path: 'CurrencyCode', type: 'sap.ui.model.odata.type.String' , constraints:{ maxLength:5, nullable:false } }"/>
+                    <Label text="Bus. Part. Role" required="true"/>
+                    <Input name="BusinessPartnerRole" id="Form_BusinessPartnerRole" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true" value="{ path: 'BusinessPartnerRole', type: 'sap.ui.model.odata.type.String' , constraints:{ maxLength:3, nullable:false } }"/>
+                    <Label text="Time Stamp" required="false"/>
+                    <!--<DatePicker name="CreatedAt" value="{ path: 'CreatedAt', type: 'sap.ui.model.type.DateTime'}" id="CreatedAt" type="DateTime" enabled="false" visible="true"/>-->
+                    <Label text="Time Stamp" required="false"/>
+                    <!--<DatePicker name="ChangedAt" value="{ path: 'ChangedAt', type: 'sap.ui.model.type.DateTime'}" id="ChangedAt" type="DateTime" enabled="false" visible="true"/>-->
+                  </f:content>
+                </f:SimpleForm>
+              </VBox>
+              <Button xmlns="sap.m" text="Create Business Partner AJAX" id="createItem" press="btnPress_createBusinessPartner"/>
+              <Button xmlns="sap.m" text="Create Business Partner OData" id="createItemOData" press="btnPress_createBusinessPartnerOData"/>
+              <Button xmlns="sap.m" text="Update Business Partner AJAX" id="updateItem" press="btnPress_updateBusinessPartner"/>
+              <Button xmlns="sap.m" text="Update Business Partner OData" id="updateItemOData" press="btnPress_updateBusinessPartnerOData"/>
+            </content>
+          </Panel>
+        </sap.m.semantic:content>
+        <semantic:messagesIndicator>
+          <semantic:MessagesIndicator press="onMessagesButtonPress"/>
+        </semantic:messagesIndicator>
+        <semantic:pagingAction>
+          <PagingButton count="5" positionChange="onPositionChange"/>
+        </semantic:pagingAction>
+        <semantic:customFooterContent>
+          <OverflowToolbarButton icon="sap-icon://settings" text="Settings" press="onPress"/>
+          <OverflowToolbarButton icon="sap-icon://video" text="Video" press="onPress"/>
+        </semantic:customFooterContent>
+        <semantic:customShareMenuContent>
+          <Button text="CustomShareBtn1" icon="sap-icon://color-fill" press="onPress"/>
+          <Button text="CustomShareBtn2" icon="sap-icon://crop" press="onPress"/>
+        </semantic:customShareMenuContent>
+      </sap.m.semantic:FullscreenPage>
+    </pages>
+  </App>
+</mvc:View>
